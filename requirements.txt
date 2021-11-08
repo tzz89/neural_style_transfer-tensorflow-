@@ -6,3 +6,4 @@ tqdm
 plotly
 dash
 dash-bootstrap-components
+typer
