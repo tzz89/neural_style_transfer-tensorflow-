@@ -184,7 +184,7 @@ if __name__ == "__main__":
     for i, content_img in enumerate(content_images):
         for j, style_img in enumerate(style_images):
 
-            dir = f"content_{i}_ style_{j}"
+            dir = os.path.join("generated_images", f"content_{i}_ style_{j}")
             os.makedirs(dir, exist_ok=True)
 
             content_image = tf_loadimg(content_img)
