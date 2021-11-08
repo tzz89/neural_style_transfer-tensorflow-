@@ -1,0 +1,7 @@
+numpy
+notebook
+Pillow
+tqdm
+plotly
+dash
+dash-bootstrap-components
