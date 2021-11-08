@@ -75,7 +75,7 @@ def get_vgg19():
                             'block5_conv1'] + ['block5_conv2']
 
     model_filepath = os.path.join("models", "vgg19.h5")
-    if os.path.isdir(model_filepath):
+    if os.path.isfile(model_filepath):
         vgg = tf.keras.applications.VGG19(
             include_top=False, weights=model_filepath)
     else:
@@ -124,7 +124,7 @@ def intialize_models_target(content_image, style_image, config):
     seed_tf(42)
 
     optimizer = tf.keras.optimizers.Adam(
-        learning_rate=0.03, beta_1=0.99, epsilon=1e-1)
+        learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
 
     # content_image = tf.image.resize(content_image, config['image_size'])
     # style_image = tf.image.resize(style_image, config['image_size'])
@@ -193,7 +193,7 @@ if __name__ == "__main__":
             content_image_variable, target_content, target_style, extractor, optimizer = intialize_models_target(
                 content_image, style_image, config)
 
-            epochs = 500
+            epochs = 1000 
             for epoch in range(epochs):
                 print(f"Training step {epoch+1} / {epochs}")
                 train_step(content_image_variable, target_content,
