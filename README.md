@@ -4,8 +4,8 @@ In this project, we are replicating the original neural style transfer algorithm
 
 ### Original content images
 <p align="left">
-<img src="sample_data/content_pictures/content1.jpg" height="500px" width="370px">
-<img src="sample_data/content_pictures/content3.jpg" height="500px" width="370px">
+<img src="sample_data/content_pictures/content1.jpg" height="450px" width="370px">
+<img src="sample_data/content_pictures/content3.jpg" height="450px" width="370px">
 <p>
 
 ### Original style images
@@ -20,7 +20,8 @@ In this project, we are replicating the original neural style transfer algorithm
 <img src="gifs/gif_0_0.gif" width="270px">
 <img src="gifs/gif_0_1.gif" width="270px">
 <img src="gifs/gif_0_2.gif" width="270px">
-
+<p>
+<p align="center">
 <img src="gifs/gif_2_0.gif" width="270px">
 <img src="gifs/gif_2_1.gif" width="270px">
 <img src="gifs/gif_2_2.gif" width="270px">
