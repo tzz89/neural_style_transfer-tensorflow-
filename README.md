@@ -15,12 +15,14 @@ In this project, we are replicating the original neural style transfer algorithm
 <img src="sample_data/style_pictures/style3.jpg" width="200px">
 <p><br>
 
-### Examples
+### Example Obama
 <p align="center">
 <img src="gifs/gif_0_0.gif" width="200px">
 <img src="gifs/gif_0_1.gif" width="200px">
 <img src="gifs/gif_0_2.gif" width="200px">
 <p>
+
+### Example Wild bear
 <p align="center">
 <img src="gifs/gif_2_0.gif" width="200px">
 <img src="gifs/gif_2_1.gif" width="200px">
