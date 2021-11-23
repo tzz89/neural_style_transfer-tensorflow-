@@ -1,6 +1,5 @@
 FROM tensorflow/tensorflow:2.5.0
 
-
 COPY  . src/
 
 USER user
