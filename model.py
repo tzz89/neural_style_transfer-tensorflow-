@@ -1,10 +1,12 @@
 # tensorflow lib
+import base64
 import tensorflow as tf
 
 # python lib
 import os
 import random
 import numpy as np
+import io
 
 # image library
 import PIL
@@ -126,8 +128,8 @@ def intialize_models_target(content_image, style_image, config):
     optimizer = tf.keras.optimizers.Adam(
         learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
 
-    # content_image = tf.image.resize(content_image, config['image_size'])
-    # style_image = tf.image.resize(style_image, config['image_size'])
+    content_image = tf.image.resize(content_image, config['image_size'])
+    style_image = tf.image.resize(style_image, config['image_size'])
 
     content_image_variable = tf.Variable(content_image)
     extractor = StyleContentExtractor()
@@ -153,6 +155,19 @@ def tf_loadimg(filepath, max_image_dim=512):
     return tf.expand_dims(image_tensor, 0)
 
 
+def convert_binary_to_tensor(binary_img, max_image_dim=512):
+    binary_img = base64.b64decode(binary_img)
+    image_tensor = tf.io.decode_image(binary_img, channels=3)
+    image_tensor = tf.image.convert_image_dtype(image_tensor, tf.float32)
+    max_dim = tf.reduce_max(image_tensor.shape)
+    scale = tf.cast(max_image_dim/max_dim, tf.float32)
+    new_size = scale*tf.cast(image_tensor.shape[:-1], tf.float32)
+    new_size = tf.cast(tf.round(new_size), tf.int32)
+
+    image_tensor = tf.image.resize(image_tensor, new_size)
+    return tf.expand_dims(image_tensor, 0)
+
+
 def tensor_to_image(tensor):
     tensor = tensor * 255
     tensor = np.array(tensor, dtype=np.uint8)
@@ -162,49 +177,25 @@ def tensor_to_image(tensor):
     return PIL.Image.fromarray(tensor)
 
 
-if __name__ == "__main__":
-    config = {
-        "total_variation_weight": 30,
-        "style_weight": 1e-2,
-        "content_weight": 1e4,
-        "image_size": (256, 256)
-    }
+def tensor_to_base64(tensor):
+    pil_image = tensor_to_image(tensor)
+    output = io.BytesIO()
+    pil_image.save(output, format='JPEG')
+    output.seek(0)
+    return base64.b64encode(output.read())
 
-    content_images = [
-        "sample_data\content_pictures\content1.jpg",
-        "sample_data\content_pictures\content2.jpg",
-        "sample_data\content_pictures\content3.jpg",
-    ]
-    style_images = [
-        "sample_data\style_pictures\style1.jpg",
-        "sample_data\style_pictures\style2.jpg",
-        "sample_data\style_pictures\style3.jpg",
-    ]
 
-    for i, content_img in enumerate(content_images):
-        for j, style_img in enumerate(style_images):
+def generate_neural_style_transfer(binary_content_img, binary_style_img, config):
+    content_image = convert_binary_to_tensor(binary_content_img)
+    style_image = convert_binary_to_tensor(binary_style_img)
 
-            dir = os.path.join("generated_images", f"content_{i}_ style_{j}")
-            os.makedirs(dir, exist_ok=True)
+    content_image_variable, target_content, target_style, extractor, optimizer = intialize_models_target(
+        content_image, style_image, config)
+    for epoch in range(config['epochs']):
+        train_step(content_image_variable, target_content,
+                   target_style, extractor, optimizer, config)
 
-            content_image = tf_loadimg(content_img)
-            style_image = tf_loadimg(style_img)
+    content_image_variable = tf.image.resize(
+        content_image_variable, (300, 240))
 
-            content_image_variable, target_content, target_style, extractor, optimizer = intialize_models_target(
-                content_image, style_image, config)
-
-            epochs = 1000 
-            for epoch in range(epochs):
-                print(f"Training step {epoch+1} / {epochs}")
-                train_step(content_image_variable, target_content,
-                           target_style, extractor, optimizer, config)
-
-                if (epoch+1) % 25 == 0:
-                    print("Saving")
-                    trained_image = tensor_to_image(content_image_variable)
-                    image_path = os.path.join(dir, f"epoch_{epoch+1}.jpg")
-                    trained_image.save(image_path)
-
-            trained_image = tensor_to_image(content_image_variable)
-            image_path = os.path.join(dir, f"final.jpg")
-            trained_image.save(image_path)
+    return tensor_to_base64(content_image_variable)
