@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 import base64
+import os
 
 # utils
 from utils import image_read_and_resize
@@ -14,15 +15,15 @@ from model import generate_neural_style_transfer
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 TARGET_INPUT_IMAGE_SIZE = (300, 240)
-obama_image_path = "sample_data\content_pictures\content1.jpg"
-dog_image_path = "sample_data\content_pictures\content2.jpg"
-bear_image_path = "sample_data\content_pictures\content3.jpg"
+obama_image_path = os.path.join("sample_data", "content_pictures","content1.jpg")
+dog_image_path = os.path.join("sample_data", "content_pictures","content2.jpg")
+bear_image_path =os.path.join("sample_data", "content_pictures","content3.jpg") 
 
-style1_image_path = "sample_data\style_pictures\style1.jpg"
-style2_image_path = "sample_data\style_pictures\style2.jpg"
-style3_image_path = "sample_data\style_pictures\style3.jpg"
+style1_image_path = os.path.join("sample_data","style_pictures", "style1.jpg")
+style2_image_path = os.path.join("sample_data","style_pictures", "style2.jpg")
+style3_image_path = os.path.join("sample_data","style_pictures", "style3.jpg")
 
-sample_output_image = "generated_images\content_0_ style_0\epoch_1000.jpg"
+sample_output_image = os.path.join("generated_images","content_0_ style_0", "epoch_1000.jpg")
 
 obama_image_encoded = image_read_and_resize(
     obama_image_path, target_size=TARGET_INPUT_IMAGE_SIZE, input_type='filepath')
