@@ -10,6 +10,14 @@ In this project, I am replicating the original neural style transfer algorithm u
     - Loading spinner
 4. nvidia-docker2
 
+## Running Docker image instructions and demo
+NOTE: you will need to have nvidia-docker2 installed inorder to utilize gpu
+```bash
+$ docker pull teozz89/neural_style_transfer
+$ docker run -it --rm --gpus all teozz89/neural_style_transfer 
+```
+[![Demo](http://img.youtube.com/vi/qhf8pY3MYRQ/0.jpg)]
+(https://www.youtube.com/watch?v=qhf8pY3MYRQ "Video Title")
 
 ### Original content images
 <p align="left">
