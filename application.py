@@ -198,8 +198,8 @@ def generate_style_transfer(btn_1, content_img, style_img):
         "total_variation_weight": 30,
         "style_weight": 1e-2,
         "content_weight": 1e4,
-        "image_size": (128, 128),
-        "epochs": 20
+        "image_size": (256, 256),
+        "epochs": 300
     }
 
     base64_image = generate_neural_style_transfer(
